@@ -22,6 +22,6 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the production website with the AWS CLI
         run: |
-          aws s3 cp index.html s3://chayutpong-resume/index.html \
-          aws s3 cp style s3://chayutpong-resume/style/ --recursive \
+          aws s3 cp index.html s3://chayutpong-resume/index.html
+          aws s3 cp style s3://chayutpong-resume/style/ --recursive
           aws s3 cp script s3://chayutpong-resume/script/ --recursive
