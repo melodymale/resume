@@ -25,4 +25,6 @@ jobs:
           aws s3 cp index.html s3://chayutpong-resume/index.html
           aws s3 cp style s3://chayutpong-resume/style/ --recursive
           aws s3 cp script s3://chayutpong-resume/script/ --recursive
+      - name: Invalidate Cloudfront static files
+        run: |
           aws cloudfront create-invalidation distribution-id $DISTRIBUTION_ID --path "/*"
