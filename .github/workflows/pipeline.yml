@@ -16,7 +16,7 @@ jobs:
       - name: Configure AWS credentials from Production account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::599497604578:role/GithubActionsPutResume
+          role-to-assume: arn:aws:iam::599497604578:role/GithubActionsResume
           aws-region: ap-southeast-2
           role-duration-seconds: 1200
           role-session-name: GitHubActions
