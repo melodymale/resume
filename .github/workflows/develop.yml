@@ -44,4 +44,4 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the develop bucket
         run: |
-          aws s3 sync frontend s3://chayutpong-resume-develop
+          aws s3 sync frontend s3://${stdout}
