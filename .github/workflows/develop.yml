@@ -16,7 +16,7 @@ jobs:
       - name: Configure AWS credentials from Develop account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN_DEVELOP }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
           aws-region: ap-southeast-2
           role-duration-seconds: 1200
           role-session-name: GitHubActions
