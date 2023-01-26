@@ -1,0 +1,25 @@
+name: GithubActions Develop Branch
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials from Develop account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_DEVELOP }}
+          aws-region: ap-southeast-2
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+      - name: Copy files to the develop bucket
+        run: |
+          aws s3 sync frontend s3://chayutpong-resume
