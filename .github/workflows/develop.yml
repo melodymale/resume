@@ -6,13 +6,31 @@ on:
       - develop
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials from Develop account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
+          aws-region: ap-southeast-2
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+      - uses: hashicorp/setup-terraform@v2
+      - run: terraform init
+      - run: terraform plan -var-file="values/develop.tfvars"
+      - run: terraform apply -var-file="values/develop.tfvars"
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials from Develop account
         uses: aws-actions/configure-aws-credentials@v1
         with:
