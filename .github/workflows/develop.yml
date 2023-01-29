@@ -44,7 +44,7 @@ jobs:
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
+        run: terragrunt run-all apply --terragrunt-non-interactive
       - id: terraform_output
         name: Terragrunt Output
         run: terragrunt output >> $GITHUB_OUTPUT
