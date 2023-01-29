@@ -48,7 +48,7 @@ jobs:
       - id: get_bucket_name
         name: Get Bucket Name
         run: |
-          bucket_name=$(terragrunt run-all output -json)
+          bucket_name=$(terragrunt output bucket_name)
           echo $bucket_name
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   #     - name: Print Bucket Name
