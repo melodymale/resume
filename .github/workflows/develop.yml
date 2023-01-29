@@ -61,4 +61,4 @@ jobs:
       - name: Copy files to the develop bucket
         run: |
           echo ${{needs.terraform.outputs.output}} && \
-          aws s3 sync frontend s3://${{stdout}}
+          aws s3 sync frontend s3://${stdout}
