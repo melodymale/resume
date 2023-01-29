@@ -24,7 +24,7 @@ jobs:
           role-duration-seconds: 1200
           role-session-name: GitHubActions
       - name: Setup Terraform v2.0.3
-        uses: hashicorp/setup-Terraform@v2
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 2.0.3
           terraform_wrapper: true
