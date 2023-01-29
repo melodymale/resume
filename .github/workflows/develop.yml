@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./tf
+        working-directory: ./tf/develop
     permissions:
       id-token: write
       contents: read
