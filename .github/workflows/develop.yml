@@ -1,4 +1,4 @@
-name: GithubActions Develop Branch
+name: Github Actions Develop Branch
 
 on:
   push:
@@ -23,10 +23,26 @@ jobs:
           aws-region: ap-southeast-2
           role-duration-seconds: 1200
           role-session-name: GitHubActions
-      - uses: hashicorp/setup-terraform@v2
-      - run: terraform init
-      - run: terraform plan -var-file="values/develop.tfvars"
-      - run: terraform apply -var-file="values/develop.tfvars"
+      - name: Setup Terraform v2.0.3
+        uses: hashicorp/setup-Terraform@v2
+        with:
+          terraform_version: 2.0.3
+          terraform_wrapper: true
+      - name: Setup Terraform version
+        run: terraform --version
+      - name: Setup Terraform wrapper path
+        run: which terraform
+      - name: Setup Terragrunt v0.43.0
+        run: |
+          sudo wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.43.0/terragrunt_linux_amd64"
+          sudo chmod +x /bin/terragrunt
+          terragrunt -v
+      - name: Terragrunt Init
+        run: terragrunt init
+      - name: Terragrunt Plan
+        run: terragrunt run-all plan
+      - name: Terragrunt Apply
+        run: terragrunt run-all apply
   sync:
     needs: terraform
     runs-on: ubuntu-latest
