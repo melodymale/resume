@@ -47,6 +47,7 @@ jobs:
         name: Terragrunt Apply
         run: |
           output=$(terragrunt run-all apply --terragrunt-non-interactive)
+          echo $output
           echo "output=$output" >> $GITHUB_OUTPUT
       - name: Print Output
         run: echo "Output is ${{ steps.terragrunt_apply.outputs.output }}"
