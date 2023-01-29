@@ -40,12 +40,14 @@ jobs:
         run: terragrunt init
       - name: Terragrunt Plan
         run: terragrunt run-all plan
-      - id: terragrunt_apply
-        name: Terragrunt Apply
+      - name: Terragrunt Apply
         run: terragrunt run-all apply --terragrunt-non-interactive
-      - run: echo ${{ steps.terragrunt_apply.outputs.stdout }}
-      - run: echo ${{ steps.terragrunt_apply.outputs.stderr }}
-      - run: echo ${{ steps.terragrunt_apply.outputs.exitcode }}
+      - id: terragrunt_output
+        name: Terragrunt Output
+        run: terragrunt run-all output
+      - run: echo ${{ steps.terragrunt_output.outputs.stdout }}
+      - run: echo ${{ steps.terragrunt_output.outputs.stderr }}
+      - run: echo ${{ steps.terragrunt_output.outputs.exitcode }}
   sync:
     needs: terraform
     runs-on: ubuntu-latest
