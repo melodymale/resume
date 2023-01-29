@@ -45,7 +45,7 @@ jobs:
         run: terragrunt run-all plan
       - id: terraform_apply
         name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive
+        run: terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
   sync:
     needs: terraform
     runs-on: ubuntu-latest
