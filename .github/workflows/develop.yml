@@ -8,6 +8,8 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    outputs:
+      bucket_name: ${{ steps.terragrunt_apply.outputs.bucket_name }}
     defaults:
       run:
         working-directory: ./tf/develop
@@ -43,10 +45,7 @@ jobs:
         run: terragrunt run-all plan
       - id: terragrunt_apply
         name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive
-      - run: echo ${{ steps.terragrunt_apply.outputs.stdout }}
-      - run: echo ${{ steps.terragrunt_apply.outputs.stderr }}
-      - run: echo ${{ steps.terragrunt_apply.outputs.exitcode }}
+        run: terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
   sync:
     needs: terraform
     runs-on: ubuntu-latest
@@ -64,4 +63,5 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the develop bucket
         run: |
-          aws s3 sync frontend s3://${stdout}
+          echo ${{needs.terraform.outputs.bucket_name}}
+          aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
