@@ -9,7 +9,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     outputs:
-      bucket_name: ${{ steps.terragrunt_apply.outputs.bucket_name }}
+      bucket_name: ${{ steps.get_bucket_name.outputs.bucket_name }}
     defaults:
       run:
         working-directory: ./tf/develop
@@ -43,9 +43,11 @@ jobs:
         run: terragrunt init
       - name: Terragrunt Plan
         run: terragrunt run-all plan
-      - id: terragrunt_apply
-        name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
+      - name: Terragrunt Apply
+        run: terragrunt run-all apply --terragrunt-non-interactive
+      - id: get_bucket_name
+        name: Get Bucket Name
+        run: echo bucket_name=$(terragrunt output bucket_name)>> $GITHUB_OUTPUT
   sync:
     needs: terraform
     runs-on: ubuntu-latest
