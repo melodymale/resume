@@ -48,7 +48,7 @@ jobs:
       - id: get_bucket_name
         name: Get Bucket Name
         run: |
-          bucket_name=$(terragrunt output bucket_name)
+          bucket_name=$(terragrunt run-all output -json | jq '.bucket_name.value')
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
       - name: Print Bucket Name
         run: echo "The selected color is ${{ steps.get_bucket_name.outputs.bucket_name }}"
