@@ -47,7 +47,7 @@ jobs:
         run: terragrunt run-all apply --terragrunt-non-interactive
       - id: get_bucket_name
         name: Get Bucket Name
-        run: echo bucket_name=$(terragrunt output bucket_name) >> $GITHUB_OUTPUT
+        run: echo "bucket_name=$(terragrunt output bucket_name)" >> $GITHUB_OUTPUT
       - name: Print Bucket Name
         run: echo "The selected color is ${{ steps.get_bucket_name.outputs.bucket_name }}"
   sync:
