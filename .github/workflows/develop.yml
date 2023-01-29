@@ -48,26 +48,27 @@ jobs:
       - id: get_bucket_name
         name: Get Bucket Name
         run: |
-          bucket_name=$(terragrunt run-all output -json | jq '.bucket_name.value')
+          bucket_name=$(terragrunt run-all output -json)
+          echo $bucket_name
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
-      - name: Print Bucket Name
-        run: echo "The selected color is ${{ steps.get_bucket_name.outputs.bucket_name }}"
-  sync:
-    needs: terraform
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-      - name: Configure AWS credentials from Develop account
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
-          aws-region: ap-southeast-2
-          role-duration-seconds: 1200
-          role-session-name: GitHubActions
-      - name: Copy files to the develop bucket
-        run: |
-          echo ${{needs.terraform.outputs.bucket_name}}
-          aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
+  #     - name: Print Bucket Name
+  #       run: echo "The selected color is ${{ steps.get_bucket_name.outputs.bucket_name }}"
+  # sync:
+  #   needs: terraform
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Configure AWS credentials from Develop account
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
+  #         aws-region: ap-southeast-2
+  #         role-duration-seconds: 1200
+  #         role-session-name: GitHubActions
+  #     - name: Copy files to the develop bucket
+  #       run: |
+  #         echo ${{needs.terraform.outputs.bucket_name}}
+  #         aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
