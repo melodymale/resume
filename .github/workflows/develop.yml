@@ -47,7 +47,7 @@ jobs:
         name: Terragrunt Apply
         run: |
           output=$(terragrunt run-all apply --terragrunt-non-interactive)
-          echo "output=$output" >> $GITHUB_ENV
+          echo "output=$output" >> $GITHUB_OUTPUT
   sync:
     needs: terraform
     runs-on: ubuntu-latest
