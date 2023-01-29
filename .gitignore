@@ -1,1 +1,4 @@
-tf/.terraform*
+*.tfstate
+.terragrunt-cache/
+.DS_Store
+.terraform*
