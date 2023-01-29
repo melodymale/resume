@@ -43,12 +43,13 @@ jobs:
         run: terragrunt init
       - name: Terragrunt Plan
         run: terragrunt run-all plan
-      - name: Terragrunt Apply
+      - id: terragrunt_apply
+        name: Terragrunt Apply
         run: |
-          output=$(terragrunt run-all apply --terragrunt-non-interactive --terragrunt-log-level debug --terragrunt-debug)
-          echo $output
-  #     - name: Print Bucket Name
-  #       run: echo "The selected color is ${{ steps.get_bucket_name.outputs.bucket_name }}"
+          output=$(terragrunt run-all apply --terragrunt-non-interactive)
+          echo "output=$output" >> $GITHUB_OUTPUT
+      - name: Print Output
+        run: echo "Output is ${{ steps.terragrunt_apply.outputs.output }}"
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
