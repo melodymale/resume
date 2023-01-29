@@ -42,7 +42,7 @@ jobs:
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
-        run: terragrunt run-all apply
+        run: terragrunt run-all apply --terragrunt-non-interactive
   sync:
     needs: terraform
     runs-on: ubuntu-latest
