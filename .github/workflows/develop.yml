@@ -43,14 +43,14 @@ jobs:
         run: terragrunt init
       - name: Terragrunt Plan
         run: terragrunt run-all plan
-      - id: terragrunt_apply
-        name: Terragrunt Apply
+      - name: Terragrunt Apply
         run: |
-          output=$(terragrunt run-all apply --terragrunt-non-interactive)
+          terragrunt run-all apply --terragrunt-non-interactive
+      - id: get_bucket_name
+        name: Get Bucket Name
+        run: |
+          output=$(terragrunt output bucket_name)
           echo $output
-          echo "output=$output" >> $GITHUB_OUTPUT
-      - name: Print Output
-        run: echo "Output is ${{ steps.terragrunt_apply.outputs.output }}"
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
