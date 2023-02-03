@@ -48,7 +48,7 @@ jobs:
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
       - name: Use Terraform Output
-        run: echo ${{ steps.terragrunt_apply.outputs }}
+        run: echo ${{ steps.terragrunt_apply.outputs.bucket_name }}
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
