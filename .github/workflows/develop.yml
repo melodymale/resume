@@ -46,11 +46,16 @@ jobs:
       - name: Terragrunt Apply
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
-      - id: get_bucket_name
-        name: Get Bucket Name
-        run: |
-          output=$(terragrunt output bucket_name)
-          echo $output
+      - name: 'Terraform Output'
+        id: terraform
+        uses: the-commons-project/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.13
+          tg_actions_version: 'latest'
+          tf_actions_subcommand: 'output'
+          tf_actions_working_dir: '.'
+      - name: 'Use Terraform Output'
+        run: echo ${{ steps.terraform.outputs.tf_actions_output  }}
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
