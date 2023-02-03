@@ -44,13 +44,11 @@ jobs:
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
+        id: terragrunt_apply
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
-      - name: Terraform Output
-        run: |
-          terragrunt run-all output
       - name: Use Terraform Output
-        run: echo ${{ steps.terraform.outputs.tf_actions_output  }}
+        run: echo ${{ steps.terragrunt_apply.outputs }}
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
