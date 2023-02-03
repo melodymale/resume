@@ -46,14 +46,10 @@ jobs:
       - name: Terragrunt Apply
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
-      - name: 'Terraform Output'
-        id: terraform
-        uses: the-commons-project/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.13
-          tg_actions_version: 'latest'
-          tf_actions_subcommand: 'output'
-      - name: 'Use Terraform Output'
+      - name: Terraform Output
+        run: |
+          terragrunt run-all output
+      - name: Use Terraform Output
         run: echo ${{ steps.terraform.outputs.tf_actions_output  }}
   # sync:
   #   needs: terraform
