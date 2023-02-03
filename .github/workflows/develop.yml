@@ -46,8 +46,7 @@ jobs:
       - name: Terragrunt Apply
         id: terragrunt_apply
         run: |
-          terragrunt_apply_output=$(terragrunt run-all apply --terragrunt-non-interactive)
-          echo "bucket_name=$terragrunt_apply_output" >> $GITHUB_OUTPUT
+          terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
       - name: Use Terraform Output
         run: |
           echo ${{ steps.terragrunt_apply.outputs }}
