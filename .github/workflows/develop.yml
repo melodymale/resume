@@ -43,6 +43,7 @@ jobs:
       - name: Read json file
         id: get_bucket_name
         run: |
+          cat terragrunt_rendered.json
           input_bucket_name=$(cat terragrunt_rendered.json | jq ".inputs.bucket_name")
           echo $input_bucket_name
           echo "bucket_name=$input_bucket_name" >> $GITHUB_OUTPUT
