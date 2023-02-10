@@ -25,43 +25,27 @@ jobs:
           aws-region: ap-southeast-2
           role-duration-seconds: 1200
           role-session-name: GitHubActions
-      - name: Setup Terraform
-        uses: autero1/action-terragrunt@v1.3.0
+      - name: Setup Terraform v2.0.3
+        uses: hashicorp/setup-terraform@v2
         with:
-          terragrunt_version: 0.43.2
+          terraform_version: 1.3.7
+      - name: Setup Terraform version
+        run: terraform --version
+      - name: Setup Terraform wrapper path
+        run: which terraform
+      - name: Setup Terragrunt v0.43.0
+        run: |
+          sudo wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.43.0/terragrunt_linux_amd64"
+          sudo chmod +x /bin/terragrunt
+          terragrunt -v
       - name: Terragrunt Init
         run: terragrunt init
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
-        id: terragrunt_apply
-        run: terragrunt run-all apply --terragrunt-non-interactive
-      - name: Use Terraform Output
-        run: |
-          echo "#######################"
-          terragrunt_all_output=$(terragrunt run-all output)
-          echo "#######################"
-          echo $terragrunt_all_output
-          echo "#######################"
-          bucket_output=$(terragrunt output bucket_name)
-          echo "#######################"
-          echo $bucket_output
-          echo "#######################"
-          echo ${{ steps.terragrunt_apply.outputs }}
-          echo "#######################"
-          echo ${{ steps.terragrunt_apply.outputs.bucket_name }}
-          echo "#######################"
-          echo ${{ steps.terragrunt_apply.outputs.stdout }}
-          echo "#######################"
-          echo ${{ steps.terragrunt_apply.outputs.output }}
-          echo "#######################"
-          echo "#######################"
-          echo ${{ steps.terragrunt_refresh.outputs }}
-          echo "#######################"
-          echo ${{ steps.terragrunt_refresh.outputs.bucket_name }}
-          echo "#######################"
-          echo ${{ steps.terragrunt_refresh.outputs.stdout }}
-          echo "#######################"
+        run: terragrunt run-all apply --terragrunt-non-interactive 
+      - name: Save Terraform json
+        run: terragrunt render-json
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
