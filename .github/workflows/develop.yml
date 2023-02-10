@@ -12,6 +12,7 @@ jobs:
       bucket_name: ${{ steps.get_bucket_name.outputs.bucket_name }}
     defaults:
       run:
+        shell: bash
         working-directory: ./tf/develop
     permissions:
       id-token: write
