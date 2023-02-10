@@ -48,13 +48,12 @@ jobs:
           echo $TF_VAR_bucket_name
       - name: Terragrunt Output
         run: |
-          terragrunt run-all output -json > example.json
-          cat example.json
+          terragrunt run-all output -json > output.json
       - name: Read json file
         id: get_bucket_name
         run: |
-          cat example.json
-          bucket_name=$(cat example.json | jq ".bucket_name.value")
+          cat output.json
+          bucket_name=$(cat output.json | jq -s ".[0].bucket_name.value")
           echo $bucket_name
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   sync:
