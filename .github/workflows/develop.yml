@@ -47,7 +47,10 @@ jobs:
       - name: Save Terraform json
         run: terragrunt render-json
       - name: Read json file
-        run: cat terragrunt_rendered.json
+        id: get_bucket_name
+        run: |
+          bucket_name=$(cat terragrunt_rendered.json | jq ".inputs.bucket_name")
+          echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
