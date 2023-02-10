@@ -51,8 +51,8 @@ jobs:
         run: terragrunt render-json
       - name: Terraform Output
         run: |
-          output=$(terraform output bucket_name)
-          echo $output
+          terraform run-all output -json > example.json
+          cat example.json
       - name: Read json file
         id: get_bucket_name
         run: |
