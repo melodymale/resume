@@ -45,15 +45,10 @@ jobs:
         run: terragrunt run-all plan
       - name: Terragrunt Apply
         id: terragrunt_apply
-        run: |
-          output=$(terragrunt run-all apply --terragrunt-non-interactive)
-          echo "#######################"
-          echo $output
-          echo "#######################"
-          echo "terragrunt_output=$output"
-          echo "#######################"
-          echo $terragrunt_output
-          echo "#######################"
+        run: terragrunt run-all apply --terragrunt-non-interactive
+      - name: Terragrunt Refresh
+        id: terragrunt_refresh
+        run: terragrunt refresh >> $GITHUB_OUTPUT
       - name: Use Terraform Output
         run: |
           echo "#######################"
@@ -72,6 +67,13 @@ jobs:
           echo ${{ steps.terragrunt_apply.outputs.stdout }}
           echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs.output }}
+          echo "#######################"
+          echo "#######################"
+          echo ${{ steps.terragrunt_refresh.outputs }}
+          echo "#######################"
+          echo ${{ steps.terragrunt_refresh.outputs.bucket_name }}
+          echo "#######################"
+          echo ${{ steps.terragrunt_refresh.outputs.stdout }}
           echo "#######################"
   # sync:
   #   needs: terraform
