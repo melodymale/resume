@@ -35,7 +35,7 @@ jobs:
         run: terragrunt run-all plan
       - name: Terragrunt Apply
         id: terragrunt_apply
-        run: terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
+        run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Use Terraform Output
         run: |
           echo "#######################"
