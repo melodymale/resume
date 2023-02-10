@@ -43,7 +43,7 @@ jobs:
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive 
+        run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Save Terraform json
         run: terragrunt render-json
       - name: Read json file
@@ -51,22 +51,22 @@ jobs:
         run: |
           bucket_name=$(cat terragrunt_rendered.json | jq ".inputs.bucket_name")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
-  # sync:
-  #   needs: terraform
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     id-token: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Configure AWS credentials from Develop account
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
-  #         aws-region: ap-southeast-2
-  #         role-duration-seconds: 1200
-  #         role-session-name: GitHubActions
-  #     - name: Copy files to the develop bucket
-  #       run: |
-  #         echo ${{needs.terraform.outputs.bucket_name}}
-  #         aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
+  sync:
+    needs: terraform
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials from Develop account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_DEVELOP }}
+          aws-region: ap-southeast-2
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+      - name: Copy files to the develop bucket
+        run: |
+          echo ${{needs.terraform.outputs.bucket_name}}
+          aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
