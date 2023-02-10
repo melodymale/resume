@@ -56,6 +56,15 @@ jobs:
           echo "#######################"
       - name: Use Terraform Output
         run: |
+          echo "#######################"
+          terragrunt_all_output=$(terragrunt run-all output)
+          echo "#######################"
+          echo $terragrunt_all_output
+          echo "#######################"
+          bucket_output=$(terragrunt output bucket_name)
+          echo "#######################"
+          echo $bucket_output
+          echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs }}
           echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs.bucket_name }}
