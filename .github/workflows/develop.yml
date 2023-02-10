@@ -54,7 +54,7 @@ jobs:
         id: get_bucket_name
         run: |
           cat output.json
-          bucket_name=$(cat output.json | jq -s ".[0].bucket_name.value")
+          bucket_name=$(cat output.json | jq -cs ".[0].bucket_name.value")
           echo $bucket_name
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   sync:
