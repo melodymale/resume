@@ -27,6 +27,8 @@ jobs:
           role-session-name: GitHubActions
       - name: Setup Terraform
         uses: autero1/action-terragrunt@v1.3.0
+        with:
+          terragrunt_version: 0.43.2
       - name: Terragrunt Init
         run: terragrunt init
       - name: Terragrunt Plan
