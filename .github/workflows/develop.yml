@@ -47,15 +47,23 @@ jobs:
         id: terragrunt_apply
         run: |
           output=$(terragrunt run-all apply --terragrunt-non-interactive)
+          echo "#######################"
           echo $output
+          echo "#######################"
           echo "terragrunt_output=$output"
+          echo "#######################"
           echo $terragrunt_output
+          echo "#######################"
       - name: Use Terraform Output
         run: |
           echo ${{ steps.terragrunt_apply.outputs }}
+          echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs.bucket_name }}
+          echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs.stdout }}
+          echo "#######################"
           echo ${{ steps.terragrunt_apply.outputs.output }}
+          echo "#######################"
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
