@@ -47,12 +47,14 @@ jobs:
       - name: Terragrunt Apply
         id: terragrunt_apply
         run: |
-          terragrunt run-all apply --terragrunt-non-interactive >> $GITHUB_OUTPUT
+          output=$(terragrunt run-all apply --terragrunt-non-interactive)
+          echo "output=$output" >> $GITHUB_OUTPUT
       - name: Use Terraform Output
         run: |
           echo ${{ steps.terragrunt_apply.outputs }}
           echo ${{ steps.terragrunt_apply.outputs.bucket_name }}
           echo ${{ steps.terragrunt_apply.outputs.stdout }}
+          echo ${{ steps.terragrunt_apply.outputs.output }}
   # sync:
   #   needs: terraform
   #   runs-on: ubuntu-latest
