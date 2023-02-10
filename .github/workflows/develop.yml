@@ -46,18 +46,13 @@ jobs:
       - name: Terragrunt Apply
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
-          echo $TF_VAR_bucket_name
       - name: Terragrunt Output
         run: |
           terragrunt run-all output -json > output.json
       - name: Read json file
         id: get_bucket_name
         run: |
-          cat output.json
-          echo "$$$$$$"
-          cat output.json
-          bucket_name=$(echo `cat output.json` | jq -rcs ".[0].bucket_name.value")
-          echo $bucket_name
+          bucket_name=$(cat output.json | jq -rs ".[0].bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   sync:
     needs: terraform
