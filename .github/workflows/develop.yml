@@ -47,11 +47,9 @@ jobs:
         run: |
           terragrunt run-all apply --terragrunt-non-interactive
           echo $TF_VAR_bucket_name
-      - name: Save Terraform json
-        run: terragrunt render-json
-      - name: Terraform Output
+      - name: Terragrunt Output
         run: |
-          terraform run-all output -json > example.json
+          terragrunt run-all output -json > example.json
           cat example.json
       - name: Read json file
         id: get_bucket_name
