@@ -43,7 +43,7 @@ jobs:
       - name: Terragrunt Apply
         run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Save Terraform json
-        run: terragrunt render-json
+        run: terragrunt render-json --with-metadata
       - name: Read json file
         id: get_bucket_name
         run: |
