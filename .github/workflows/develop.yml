@@ -38,12 +38,6 @@ jobs:
           sudo wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.43.0/terragrunt_linux_amd64"
           sudo chmod +x /bin/terragrunt
           terragrunt -v
-      - name: Terragrunt Init
-        run: terragrunt init
-      - name: Terragrunt Plan
-        run: terragrunt run-all plan
-      - name: Terragrunt Apply
-        run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Save Terraform json
         run: terragrunt render-json
       - name: Read json file
@@ -52,6 +46,10 @@ jobs:
           input_bucket_name=$(cat terragrunt_rendered.json | jq ".inputs.bucket_name")
           echo $input_bucket_name
           echo "bucket_name=$input_bucket_name" >> $GITHUB_OUTPUT
+      - name: Terragrunt Plan
+        run: terragrunt run-all plan
+      - name: Terragrunt Apply
+        run: terragrunt run-all apply --terragrunt-non-interactive
   sync:
     needs: terraform
     runs-on: ubuntu-latest
