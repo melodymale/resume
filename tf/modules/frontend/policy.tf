@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "cloudfront_s3_policy" {
   statement {
     sid       = "AllowCloudFrontServicePrincipalReadOnly"
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.bucket_name}/*"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.resume_bucket.id}/*"]
 
     principals {
       type        = "Service"
@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "cloudfront_s3_policy" {
 
     condition {
       test     = "StringEquals"
-      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${var.cloudfront_id}"]
+      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"]
       variable = "AWS:SourceArn"
     }
   }
