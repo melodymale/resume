@@ -47,8 +47,9 @@ jobs:
         run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Get bucket name
         id: get_bucket_name
-        working-directory: frontend/
+        working-directory: ./tf/develop/frontend
         run: |
+          pwd
           terragrunt output -json
           bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
