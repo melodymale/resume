@@ -45,9 +45,9 @@ jobs:
         run: terragrunt run-all plan
       - name: Terragrunt Apply
         run: terragrunt run-all apply --terragrunt-non-interactive
-      - name: Read json file
+      - name: Get bucket name
         id: get_bucket_name
-        working-directory: ./frontend
+        working-directory: frontend/
         run: |
           terragrunt output -json
           bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
