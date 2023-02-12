@@ -25,7 +25,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
-    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   default_cache_behavior {
@@ -40,8 +39,4 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
 data "aws_cloudfront_cache_policy" "ManagedCachingOptimized" {
   name = "Managed-CachingOptimized"
-}
-
-output "cloudfront_id" {
-  value = aws_cloudfront_distribution.s3_distribution.id
 }
