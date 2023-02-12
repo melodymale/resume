@@ -52,6 +52,7 @@ jobs:
       - name: Read json file
         id: get_bucket_name
         run: |
+          cat output.json
           bucket_name=$(cat output.json | jq -rs ".[0].bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   sync:
