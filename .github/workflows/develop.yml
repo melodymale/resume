@@ -44,16 +44,13 @@ jobs:
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
-        run: |
-          terragrunt run-all apply --terragrunt-non-interactive
-      - name: Terragrunt Output
-        run: |
-          terragrunt run-all output -json > output.json
+        run: terragrunt run-all apply --terragrunt-non-interactive
       - name: Read json file
         id: get_bucket_name
+        working-directory: ./frontend
         run: |
-          cat output.json
-          bucket_name=$(cat output.json | jq -rs ".[0].bucket_name.value")
+          terragrunt output -json
+          bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
   sync:
     needs: terraform
