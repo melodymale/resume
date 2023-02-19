@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "policy_for_lambda" {
       "dynamodb:Scan",
       "dynamodb:UpdateItem"
     ]
-    resources = ["${aws_dynamodb_table.basic-dynamodb-table.arn}/${aws_dynamodb_table.basic-dynamodb-table.name}"]
+    resources = ["${aws_dynamodb_table.basic-dynamodb-table.arn}"]
   }
 }
 

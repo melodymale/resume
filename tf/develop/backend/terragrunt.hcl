@@ -8,4 +8,6 @@ terraform {
 
 inputs = {
   region      = "ap-southeast-2"
+  lambda_relative_path = "../../../../../../backend"
+  stage_name = "develop"
 }
