@@ -1,13 +1,60 @@
-resource "aws_apigatewayv2_api" "lambda" {
-  name          = "serverless_lambda_gw"
-  protocol_type = "HTTP"
+resource "aws_api_gateway_rest_api" "lambda" {
+  name = "serverless_lambda_gw"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
-resource "aws_apigatewayv2_stage" "lambda" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_api_gateway_resource" "lambda" {
+  parent_id   = aws_api_gateway_rest_api.lambda.root_resource_id
+  path_part   = "visitorcounting"
+  rest_api_id = aws_api_gateway_rest_api.lambda.id
+}
 
-  name        = var.stage_name
-  auto_deploy = true
+resource "aws_api_gateway_method" "lambda" {
+  authorization = "NONE"
+  http_method   = "GET"
+  resource_id   = aws_api_gateway_resource.lambda.id
+  rest_api_id   = aws_api_gateway_rest_api.lambda.id
+}
+
+resource "aws_api_gateway_integration" "integration" {
+  rest_api_id             = aws_api_gateway_rest_api.lambda.id
+  resource_id             = aws_api_gateway_resource.lambda.id
+  http_method             = aws_api_gateway_method.lambda.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.visitor_counting.invoke_arn
+}
+
+resource "aws_api_gateway_deployment" "lambda" {
+  rest_api_id = aws_api_gateway_rest_api.lambda.id
+
+  triggers = {
+    # NOTE: The configuration below will satisfy ordering considerations,
+    #       but not pick up all future REST API changes. More advanced patterns
+    #       are possible, such as using the filesha1() function against the
+    #       Terraform configuration file(s) or removing the .id references to
+    #       calculate a hash against whole resources. Be aware that using whole
+    #       resources will show a difference after the initial implementation.
+    #       It will stabilize to only change when resources change afterwards.
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.lambda.id,
+      aws_api_gateway_method.lambda.id,
+      aws_api_gateway_integration.integration.id,
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "lambda" {
+  deployment_id = aws_api_gateway_deployment.lambda.id
+  rest_api_id   = aws_api_gateway_rest_api.lambda.id
+  stage_name    = var.stage_name
 
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gw.arn
@@ -28,25 +75,66 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "api_gw_lambda_integretion" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_api_gateway_method_settings" "all" {
+  rest_api_id = aws_api_gateway_rest_api.lambda.id
+  stage_name  = aws_api_gateway_stage.lambda.stage_name
+  method_path = "*/*"
 
-  integration_uri    = aws_lambda_function.visitor_counting.invoke_arn
-  integration_type   = "AWS_PROXY"
-  integration_method = "POST"
-}
-
-resource "aws_apigatewayv2_route" "lambda_route" {
-  api_id = aws_apigatewayv2_api.lambda.id
-
-  route_key = "GET /visitorcounting"
-  target    = "integrations/${aws_apigatewayv2_integration.api_gw_lambda_integretion.id}"
+  settings {
+    metrics_enabled = true
+    logging_level   = "ERROR"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda.name}"
+  name = "/aws/api_gw/${aws_api_gateway_rest_api.lambda.name}"
 
   retention_in_days = 30
+}
+
+resource "aws_api_gateway_account" "api_gw_account" {
+  cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
+}
+
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["apigateway.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "cloudwatch" {
+  name               = "api_gateway_cloudwatch_global"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+data "aws_iam_policy_document" "cloudwatch" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents",
+      "logs:GetLogEvents",
+      "logs:FilterLogEvents",
+    ]
+
+    resources = ["*"]
+  }
+}
+resource "aws_iam_role_policy" "cloudwatch" {
+  name   = "default"
+  role   = aws_iam_role.cloudwatch.id
+  policy = data.aws_iam_policy_document.cloudwatch.json
 }
 
 resource "aws_lambda_permission" "api_gw" {
@@ -55,11 +143,11 @@ resource "aws_lambda_permission" "api_gw" {
   function_name = aws_lambda_function.visitor_counting.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+  source_arn = "${aws_api_gateway_rest_api.lambda.execution_arn}/*/*/*"
 }
 
 output "base_url" {
   description = "Base URL for API Gateway stage."
 
-  value = aws_apigatewayv2_stage.lambda.invoke_url
+  value = aws_api_gateway_stage.lambda.invoke_url
 }
