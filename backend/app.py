@@ -1,4 +1,6 @@
+import json
 import logging
+from decimal import Decimal
 
 import boto3
 from botocore.exceptions import ClientError
@@ -30,4 +32,15 @@ def lambda_handler(event, context):
         raise
     else:
         logger.info("return attributes")
-        return response["Attributes"]
+
+        return {
+            "statusCode": 200,
+            "body": json.dumps(response["Attributes"], cls=JSONEncoder),
+        }
+
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
