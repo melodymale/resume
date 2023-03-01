@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 boto3 = "==1.26.54"
+pytest = "==7.1.2"
 
 [dev-packages]
 
