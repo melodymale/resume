@@ -1,4 +1,4 @@
-from .db_client import DBClient
+from db_client import DBClient
 
 
 def update_visitor_total(db_client: DBClient, key: dict):

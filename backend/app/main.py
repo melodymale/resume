@@ -1,9 +1,9 @@
 import json
 import logging
 
-from .dynamo_client import DynamoClient
-from .get_visitor_total import get_visitor_total
-from .update_visitor_total import update_visitor_total
+from dynamo_client import DynamoClient
+from get_visitor_total import get_visitor_total
+from update_visitor_total import update_visitor_total
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -24,4 +24,4 @@ def lambda_handler(event, context):
         raise ValueError('Unrecognized operation "{}"'.format(operation))
 
     response = {"total_visitor": result}
-    return {"statusCode": 200, "body": json.dumps(response), "isBase64Encoded": False}
+    return {"statusCode": 200, "body": json.dumps(response)}
