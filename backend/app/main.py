@@ -3,7 +3,6 @@ import logging
 
 from .dynamo_client import DynamoClient
 from .get_visitor_total import get_visitor_total
-from .json_encoder import JSONEncoder
 from .update_visitor_total import update_visitor_total
 
 logger = logging.getLogger()
@@ -27,5 +26,5 @@ def lambda_handler(event, context):
     response = {"total_visitor": result}
     return {
         "statusCode": 200,
-        "body": json.dumps(response, cls=JSONEncoder),
+        "body": json.dumps(response),
     }
