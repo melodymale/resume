@@ -5,5 +5,5 @@ Resources:
   VisitorCounting:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
+      Handler: app.main.lambda_handler
       Runtime: python3.9
