@@ -13,6 +13,7 @@ KEY = {"id": "visitor_counting"}
 
 def lambda_handler(event, context):
     logger.info("function gets trigger")
+    logger.info(event)
     operation = event["operation"]
     db_client = DynamoClient()
 
