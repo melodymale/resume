@@ -25,4 +25,4 @@ def lambda_handler(event, context):
         raise ValueError('Unrecognized operation "{}"'.format(operation))
 
     response = {"total_visitor": result}
-    return {"statusCode": 200, "body": json.dumps(response)}
+    return {"statusCode": 200, "body": json.dumps(response), "isBase64Encoded": False}
