@@ -24,35 +24,8 @@ resource "aws_api_gateway_integration" "integration" {
   resource_id             = aws_api_gateway_resource.lambda.id
   http_method             = aws_api_gateway_method.lambda.http_method
   integration_http_method = "POST"
-  type                    = "AWS"
+  type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.visitor_counting.invoke_arn
-}
-
-resource "aws_api_gateway_method_response" "response_200" {
-  rest_api_id = aws_api_gateway_rest_api.lambda.id
-  resource_id = aws_api_gateway_resource.lambda.id
-  http_method = aws_api_gateway_method.lambda.http_method
-  status_code = "200"
-
-  response_models = {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
-}
-
-resource "aws_api_gateway_integration_response" "lambda" {
-  rest_api_id = aws_api_gateway_rest_api.lambda.id
-  resource_id = aws_api_gateway_resource.lambda.id
-  http_method = aws_api_gateway_method.lambda.http_method
-  status_code = aws_api_gateway_method_response.response_200.status_code
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
-  }
-
 }
 
 resource "aws_api_gateway_deployment" "lambda" {
