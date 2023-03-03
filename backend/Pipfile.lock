@@ -1,11 +1,10 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6a7bfc82d98f557955274296cdecf1b8b18ea7d87cde301b70f6b853da12d774"
+            "sha256": "2c38485c947ec840c3a9c6c5200e52e0150c742ab5189387c5bdfe1e59805f95"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_full_version": "3.9.14",
             "python_version": "3.9"
         },
         "sources": [
@@ -35,11 +34,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:913ca09a184cf4428f05838afc631c4fb93f3b173871b69d66230fd14656a3a1",
-                "sha256:b31e86f9b51eced5506a0f6038370fe8c1355000379610def1bb9e91cae9e77e"
+                "sha256:0f976427ad0a2602624ba784b5db328a865c2e9e0cc1bb6d8cffb6c0a2d177e1",
+                "sha256:a36f7f6f8eae5dbd4a1cc8cb6fc747f6315500541181eff2093ee0529fc8e4bc"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.82"
+            "version": "==1.29.84"
         },
         "iniconfig": {
             "hashes": [
