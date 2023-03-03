@@ -26,10 +26,6 @@ def lambda_handler(event, context):
         raise ValueError('Unrecognized operation "{}"'.format(operation))
 
     res_body = {"visitor_total": result}
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(res_body),
-        "headers": {"Access-Control-Allow-Origin": "*"},
-    }
+    response = {"statusCode": 200, "body": json.dumps(res_body)}
     logger.info(response)
     return response
