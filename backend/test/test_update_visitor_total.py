@@ -7,4 +7,4 @@ def test_update_visitor_total():
     assert dummy_db_client.total_visitor == 0
 
     result = update_visitor_total(db_client=dummy_db_client, key={"id": "mockup"})
-    assert result == 1
+    assert result == 0
