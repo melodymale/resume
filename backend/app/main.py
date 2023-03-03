@@ -14,7 +14,8 @@ KEY = {"id": "visitor_counting"}
 def lambda_handler(event, context):
     logger.info("function gets trigger")
     logger.info(event)
-    operation = event["body"]["operation"]
+    body = json.loads(event["body"])
+    operation = body["operation"]
     db_client = DynamoClient()
 
     if operation == "read":
@@ -24,7 +25,7 @@ def lambda_handler(event, context):
     else:
         raise ValueError('Unrecognized operation "{}"'.format(operation))
 
-    body = {"visitor_total": result}
-    response = {"statusCode": 200, "body": json.dumps(body)}
+    res_body = {"visitor_total": result}
+    response = {"statusCode": 200, "body": json.dumps(res_body)}
     logger.info(response)
     return response
