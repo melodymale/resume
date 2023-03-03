@@ -6,7 +6,22 @@ on:
       - develop
 
 jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          cache: "pipenv"
+      - run: pipenv sync
+      - run: pytest test
+
   terraform:
+    needs: backend-test
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_bucket_name.outputs.bucket_name }}
