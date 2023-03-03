@@ -23,7 +23,7 @@ jobs:
           pipenv sync
       - name: Testing
         run: |
-          pytest test/
+          python -m pytest test/
 
   terraform:
     needs: backend-test
