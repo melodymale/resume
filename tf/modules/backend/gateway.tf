@@ -211,7 +211,42 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn = "${aws_api_gateway_rest_api.lambda.execution_arn}/*/*/*"
 }
 
-output "base_url" {
+resource "aws_api_gateway_usage_plan" "lambda" {
+  name = "VisitorCountingPlan"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.lambda.id
+    stage  = aws_api_gateway_stage.lambda.stage_name
+  }
+
+  quota_settings {
+    limit  = 1000
+    period = "DAY"
+  }
+
+  throttle_settings {
+    burst_limit = 100
+    rate_limit  = 200
+  }
+}
+
+resource "aws_api_gateway_api_key" "lambda" {
+  name = "VisitorCountingAPI"
+}
+
+resource "aws_api_gateway_usage_plan_key" "lambda" {
+  key_id        = aws_api_gateway_api_key.lambda.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.lambda.id
+}
+
+output "api_url" {
   description = "Base URL for API Gateway stage."
-  value       = aws_api_gateway_stage.lambda.invoke_url
+  value       = "${aws_api_gateway_stage.lambda.invoke_url}/${aws_api_gateway_resource.lambda.path_part}"
+}
+
+output "api_key" {
+  description = "API Key for visitor counting"
+  value       = aws_api_gateway_api_key.lambda.value
+  sensitive   = true
 }
