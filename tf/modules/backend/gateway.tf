@@ -55,10 +55,11 @@ resource "aws_api_gateway_method_response" "options_200" {
 }
 
 resource "aws_api_gateway_integration" "options_integration" {
-  rest_api_id = aws_api_gateway_rest_api.lambda.id
-  resource_id = aws_api_gateway_resource.lambda.id
-  http_method = aws_api_gateway_method.options_method.http_method
-  type        = "MOCK"
+  connection_type = "INTERNET"
+  rest_api_id     = aws_api_gateway_rest_api.lambda.id
+  resource_id     = aws_api_gateway_resource.lambda.id
+  http_method     = aws_api_gateway_method.options_method.http_method
+  type            = "MOCK"
 
   request_templates = {
     "application/json" = jsonencode(
@@ -81,6 +82,7 @@ resource "aws_api_gateway_integration_response" "options_integration_response" {
 }
 
 resource "aws_api_gateway_integration" "integration" {
+  connection_type         = "INTERNET"
   rest_api_id             = aws_api_gateway_rest_api.lambda.id
   resource_id             = aws_api_gateway_resource.lambda.id
   http_method             = aws_api_gateway_method.lambda.http_method
