@@ -73,6 +73,7 @@ jobs:
           terragrunt output -json
           bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
   sync:
     needs: terraform-build
     runs-on: ubuntu-latest
