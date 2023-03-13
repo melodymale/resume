@@ -73,7 +73,6 @@ jobs:
           terragrunt output -json
           bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
   sync:
     needs: terraform-build
     runs-on: ubuntu-latest
@@ -91,8 +90,8 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the develop bucket
         run: |
-          echo ${{needs.terraform.outputs.bucket_name}}
-          aws s3 sync frontend s3://${{needs.terraform.outputs.bucket_name}}
+          echo ${{needs.terraform-build.outputs.bucket_name}}
+          aws s3 sync frontend s3://${{needs.terraform-build.outputs.bucket_name}}
   terraform-destroy:
     needs: sync
     runs-on: ubuntu-latest
