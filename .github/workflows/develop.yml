@@ -126,4 +126,4 @@ jobs:
           sudo chmod +x /bin/terragrunt
           terragrunt -v
       - name: Terragrunt Destroy
-        run: terragrunt run-all destroy
+        run: terragrunt run-all destroy --terragrunt-non-interactive
