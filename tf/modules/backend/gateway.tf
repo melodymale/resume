@@ -93,6 +93,12 @@ resource "aws_api_gateway_integration" "integration" {
 }
 
 resource "aws_api_gateway_deployment" "lambda" {
+  depends_on = [
+    aws_api_gateway_method.lambda,
+    aws_api_gateway_method.options_method,
+    aws_api_gateway_integration.options_integration,
+    aws_api_gateway_integration.integration
+  ]
   rest_api_id = aws_api_gateway_rest_api.lambda.id
   variables = {
     deployed_at = "${timestamp()}"
