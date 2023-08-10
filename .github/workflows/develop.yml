@@ -26,7 +26,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: static-output
-          path: frontend/out
+          path: out
           retention-days: 1
 
   backend-test:
@@ -117,12 +117,10 @@ jobs:
           name: static-output
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: frontend
       - name: Copy files to the develop bucket
         run: |
           echo ${{needs.terraform-build.outputs.bucket_name}}
           aws s3 sync ./out  s3://${{needs.terraform-build.outputs.bucket_name}}
-          working-directory: frontend
 
   # terraform-destroy:
   #   needs: sync
