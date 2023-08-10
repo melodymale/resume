@@ -49,7 +49,6 @@ jobs:
           pytest test/
 
   terraform-build:
-    needs: [frontend-build, backend-test]
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_bucket_name.outputs.bucket_name }}
@@ -98,7 +97,7 @@ jobs:
           echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
 
   frontend-sync:
-    needs: terraform-build
+    needs: [frontend-build, terraform-build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
