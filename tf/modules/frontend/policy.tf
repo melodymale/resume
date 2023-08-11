@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "cloudfront_s3_policy" {
   }
 }
 
-resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
+resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
   bucket = var.bucket_name
   policy = data.aws_iam_policy_document.cloudfront_s3_policy.json
 }
