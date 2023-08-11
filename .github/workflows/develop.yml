@@ -26,7 +26,8 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: static-output
-          path: ./out
+          path: out/**
+          if-no-files-found: error
           retention-days: 1
 
   backend-test:
