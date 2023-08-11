@@ -123,7 +123,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: terragrunt-output
-          path: terragrunt-output.json
       - name: Display structure of downloaded files
         run: ls -R
       - name: Copy files to the develop bucket
