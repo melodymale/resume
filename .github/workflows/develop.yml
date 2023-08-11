@@ -91,6 +91,8 @@ jobs:
           terragrunt run-all output -json > temp.json
           cat temp.json
           jq -s 'reduce .[] as $item ({}; . * $item)' temp.json > terragrunt-output.json
+      - name: Check output files
+        run: ls -R
       - name: Saving output
         uses: actions/upload-artifact@v3
         with:
