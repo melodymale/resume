@@ -115,12 +115,13 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: static-output
+          path: static-output
       - name: Display structure of downloaded files
         run: ls -R
       - name: Copy files to the develop bucket
         run: |
           echo ${{needs.terraform-build.outputs.bucket_name}}
-          aws s3 sync ./out  s3://${{needs.terraform-build.outputs.bucket_name}}
+          aws s3 sync ./static-output  s3://${{needs.terraform-build.outputs.bucket_name}}
 
   # terraform-destroy:
   #   needs: sync
