@@ -97,7 +97,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terragrunt-output
-          path: terragrunt-output.json
+          path: tf/develop/terragrunt-output.json
           if-no-files-found: error
           retention-days: 1
 
