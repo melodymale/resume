@@ -122,6 +122,10 @@ jobs:
         run: |
           bucket_name=$(jq -r ".bucket_name.value" terragrunt-output.json)
           aws s3 sync ./static-output  "s3://$bucket_name"
+      - name: Invalidate Cloudfront static files
+        run: |
+          distribution_id=$(jq -r ".distribution_id.value" terragrunt-output.json)
+          aws cloudfront create-invalidation --distribution-id $distribution_id --path "/*"
 
   # terraform-destroy:
   #   needs: sync
