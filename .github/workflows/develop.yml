@@ -21,8 +21,6 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Check output folder
-        run: ls -R
       - uses: actions/upload-artifact@v3
         with:
           name: static-output
@@ -89,10 +87,7 @@ jobs:
       - name: Terragrunt Output
         run: |
           terragrunt run-all output -json > temp.json
-          cat temp.json
           jq -s 'reduce .[] as $item ({}; . * $item)' temp.json > terragrunt-output.json
-      - name: Check output files
-        run: ls -R
       - name: Saving output
         uses: actions/upload-artifact@v3
         with:
@@ -123,13 +118,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: terragrunt-output
-      - name: Display structure of downloaded files
-        run: ls -R
       - name: Copy files to the develop bucket
         run: |
-          cat terragrunt-output.json
           bucket_name=$(jq -r ".bucket_name.value" terragrunt-output.json)
-          echo $bucket_name
           aws s3 sync ./static-output  "s3://$bucket_name"
 
   # terraform-destroy:
