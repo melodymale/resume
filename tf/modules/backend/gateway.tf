@@ -100,8 +100,12 @@ resource "aws_api_gateway_deployment" "lambda" {
     aws_api_gateway_integration.integration
   ]
   rest_api_id = aws_api_gateway_rest_api.lambda.id
-  variables = {
-    deployed_at = "${timestamp()}"
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.lambda,
+      aws_api_gateway_method.options_method,
+      aws_api_gateway_integration.integration,
+    ]))
   }
   lifecycle {
     create_before_destroy = true
@@ -230,15 +234,4 @@ resource "aws_api_gateway_usage_plan_key" "lambda" {
   key_id        = aws_api_gateway_api_key.lambda.id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.lambda.id
-}
-
-output "api_url" {
-  description = "Base URL for API Gateway stage."
-  value       = "${aws_api_gateway_stage.lambda.invoke_url}/${aws_api_gateway_resource.lambda.path_part}"
-}
-
-output "api_key" {
-  description = "API Key for visitor counting"
-  value       = aws_api_gateway_api_key.lambda.value
-  sensitive   = true
 }
