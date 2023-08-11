@@ -24,7 +24,7 @@ export default function Home({ allPostsData }) {
         <p>
           Sawadee Ka! I'm Mel. A backend and data engineer from Thailand, but
           living in VIC, Australia right now. You can contact me on{" "}
-          <a href="https:/linkedin.com/in/chayutpongpro/">LinkedIn</a>.
+          <a href="https://linkedin.com/in/chayutpongpro/">LinkedIn</a>.
         </p>
         <p>
           You can build a site like this in{" "}
