@@ -51,8 +51,6 @@ jobs:
 
   terraform-build:
     runs-on: ubuntu-latest
-    outputs:
-      bucket_name: ${{ steps.get_bucket_name.outputs.bucket_name }}
     defaults:
       run:
         working-directory: ./tf/develop
@@ -88,14 +86,18 @@ jobs:
         run: terragrunt run-all plan
       - name: Terragrunt Apply
         run: terragrunt run-all apply --terragrunt-non-interactive
-      - name: Get bucket name
-        id: get_bucket_name
-        working-directory: ./tf/develop/frontend
+      - name: Terragrunt Output
         run: |
-          pwd
-          terragrunt output -json
-          bucket_name=$(terragrunt output -json | jq -r ".bucket_name.value")
-          echo "bucket_name=$bucket_name" >> $GITHUB_OUTPUT
+          terragrunt run-all output -json > temp.json
+          cat temp.json
+          jq -s 'reduce .[] as $item ({}; . * $item)' temp.json > terragrunt-output.json
+      - name: Saving output
+        uses: actions/upload-artifact@v3
+        with:
+          name: terragrunt-output
+          path: terragrunt-output.json
+          if-no-files-found: error
+          retention-days: 1
 
   frontend-sync:
     needs: [frontend-build, terraform-build]
@@ -116,12 +118,16 @@ jobs:
         with:
           name: static-output
           path: static-output
+      - uses: actions/download-artifact@v3
+        with:
+          name: terragrunt-output
+          path: terragrunt-output.json
       - name: Display structure of downloaded files
         run: ls -R
       - name: Copy files to the develop bucket
         run: |
-          echo ${{needs.terraform-build.outputs.bucket_name}}
-          aws s3 sync ./static-output  s3://${{needs.terraform-build.outputs.bucket_name}}
+          bucket_name=$(jq ".bucket_name.value" terragrunt-output.json)
+          aws s3 sync ./static-output  "s3://$bucket_name"
 
   # terraform-destroy:
   #   needs: sync
