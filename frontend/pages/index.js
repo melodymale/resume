@@ -22,8 +22,8 @@ export default function Home({ allPostsData }) {
       </Head>
       <section className={utilStyles.headingMd}>
         <p>
-          Sawadee Ka! I'm Mel. A backend and data engineer from Thailand, but
-          living in VIC, Australia right now. You can contact me on{" "}
+          🙏🏻 Sawadee Ka! I'm Mel. A backend and data engineer from Thailand, but
+          living in VIC, Australia right now. Feel free to contact me on{" "}
           <a href="https://linkedin.com/in/chayutpongpro/">LinkedIn</a>.
         </p>
         <p>
