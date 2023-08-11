@@ -128,7 +128,9 @@ jobs:
         run: ls -R
       - name: Copy files to the develop bucket
         run: |
+          cat terragrunt-output.json
           bucket_name=$(jq ".bucket_name.value" terragrunt-output.json)
+          echo $bucket_name
           aws s3 sync ./static-output  "s3://$bucket_name"
 
   # terraform-destroy:
