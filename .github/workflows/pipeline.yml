@@ -1,0 +1,30 @@
+name: Upload static websit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials from Production account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-southeast-2
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+      - name: Copy files to the production website with the AWS CLI
+        run: |
+          aws s3 cp index.html s3://chayutpong-resume/index.html
+          aws s3 cp style s3://chayutpong-resume/style/ --recursive
+          aws s3 cp script s3://chayutpong-resume/script/ --recursive
+      - name: Invalidate Cloudfront static files
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ vars.DISTRIBUTION_ID }} --path "/*"
