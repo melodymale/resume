@@ -1,0 +1,10 @@
+*.tfstate
+.terragrunt-cache/
+.DS_Store
+.terraform*
+tf/develop/backend.tf
+__pycache__/
+frontend/.next
+frontend/node_modules
+frontend/package-lock.json
+frontend/out
