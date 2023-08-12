@@ -79,7 +79,7 @@ jobs:
           sudo chmod +x /bin/terragrunt
           terragrunt -v
       - name: Terragrunt Init
-        run: terragrunt init
+        run: terragrunt init --terragrunt-non-interactive
       - name: Terragrunt Plan
         run: terragrunt run-all plan
       - name: Terragrunt Apply
