@@ -4,19 +4,18 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
   const navItems = [
     { path: "/", name: "home" },
-    { path: "/projects", name: "projects" },
+    { path: "/projects/", name: "projects" },
   ];
   const pathname = usePathname();
 
   return (
     <nav className="text-center space-x-5 py-5">
       {navItems.map((item) => {
-        const isActive = pathname === item.path;
         return (
           <Link
             href={item === "home" ? "/" : item.path}
             key={item.name}
-            className={isActive ? "underline" : "text-gray-500"}
+            className={pathname === item.path ? "underline" : "text-gray-400"}
           >
             {item.name}
           </Link>
