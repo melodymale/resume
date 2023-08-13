@@ -7,3 +7,8 @@ variable "region" {
   type        = string
   description = "region"
 }
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "acm certificate arn"
+}
