@@ -118,6 +118,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: terragrunt-output
+      - name: Remove all objects in bucket
+        run: |
+          bucket_name=$(jq -r ".bucket_name.value" terragrunt-output.json)
+          aws s3 rm "s3://$bucket_name" --recursive
       - name: Copy files to the develop bucket
         run: |
           bucket_name=$(jq -r ".bucket_name.value" terragrunt-output.json)
