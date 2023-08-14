@@ -1,21 +1,17 @@
-resource "aws_cloudfront_origin_access_control" "resume_bucket_oac" {
-  name                              = aws_s3_bucket.resume_bucket.bucket_regional_domain_name
-  description                       = "resume bucket policy"
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
-}
-
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.resume_bucket.bucket_regional_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.resume_bucket_oac.id
-    origin_id                = aws_s3_bucket.resume_bucket.id
+    origin_id   = var.bucket_name
+    domain_name = aws_s3_bucket_website_configuration.s3_web_hosting.website_endpoint
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
-  enabled             = true
-  default_root_object = "index.html"
-  aliases             = ["chayutpong.link"]
+  enabled = true
+  aliases = ["chayutpong.link"]
 
   restrictions {
     geo_restriction {
